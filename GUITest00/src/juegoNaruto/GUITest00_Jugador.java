@@ -342,7 +342,7 @@ public class GUITest00_Jugador extends javax.swing.JFrame {
     }
      
      private void ponerAudio(){
-        audio = java.applet.Applet.newAudioClip(getClass().getResource("/sonido/Shalala.wav"));
+        audio = java.applet.Applet.newAudioClip(getClass().getResource("/juegoNaruto/Shalala.wav"));
         audio.play();
      }
      
