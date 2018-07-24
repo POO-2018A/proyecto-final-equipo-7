@@ -157,7 +157,7 @@ public class GUITest00_Jugador extends javax.swing.JFrame {
 
     private void comboBoxNinjaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxNinjaActionPerformed
         // TODO add your handling code here:
-        Jugadores jugadorSeleccionado = (Jugadores) comboBoxNinja.getSelectedItem(); 
+        Jugadores jugadorSeleccionado = (Jugadores) comboBoxNinja.getSelectedItem(); //Hago esto para coger el item de mi comboBox, y "convertirlo a Jugador"
         
         //Guardo en variables los atributos de mi item seleccionado:
         String nombre   = jugadorSeleccionado.getNombre();
@@ -181,26 +181,27 @@ public class GUITest00_Jugador extends javax.swing.JFrame {
     private void buttonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModificarActionPerformed
         // TODO add your handling code here:
         System.out.println("Modificando...");
-        Jugadores jugadorSeleccionado = (Jugadores) comboBoxNinja.getSelectedItem(); 
-        boolean existe = false;
+        Jugadores jugadorSeleccionado = (Jugadores) comboBoxNinja.getSelectedItem(); //Hago esto para coger el item de mi comboBox, y "convertirlo a Jugador". Recuerda que esto me devolvería la dirección en memoria si fuera un objeto nada más...
+        boolean existe = false; //Esta variable me ayudará a comprobar si ya existe ese jugador que se pretende modificar
         
+        //Esto lo que hace es guardar el nuevo texto que he modificado cuando filtré el combobox, y presioné modificar
         String nuevoNombre   = textNombre.getText();
         String nuevoApellido = textApellido.getText();
         String nuevaCedula   = textCedula.getText();
         String nuevoUsaurio  = textUsuario.getText();
         
-        
+        //Instancio, llamo a mi clase Jugadores y le mando como valor inicial el texto modificado!... Excepto el ID, ese no va a cambiar, si se modifica segurá ocupando la misma posicion
         Jugadores jugadorModificado = new Jugadores(jugadorSeleccionado.getId(),nuevoNombre, nuevoApellido,nuevaCedula, nuevoUsaurio, 0 );
         
-        for(Object item: jugadores){ 
-            Jugadores otrosJugadores = (Jugadores) item; 
+        for(Object item: jugadores){ //Para cada elemento de tipo Objeto de mi lista de jugadores
+            Jugadores otrosJugadores = (Jugadores) item; //Hago un "casting", para convertir todos esos items a "Jugadores"
       
-            if(jugadorModificado.getNombre().equals(otrosJugadores.getNombre())){ 
-                if(jugadorModificado.getApellido().equals(otrosJugadores.getApellido())){ 
-                    if(jugadorModificado.getCedula().equals(otrosJugadores.getCedula())){ 
-                        if(jugadorModificado.getUsuario().equals(otrosJugadores.getUsuario())){ 
+            if(jugadorModificado.getNombre().equals(otrosJugadores.getNombre())){ //Si el nombre del jugador que modifique, es como el de otro jugaro
+                if(jugadorModificado.getApellido().equals(otrosJugadores.getApellido())){ //Y además el apellido, del jugador que modifique
+                    if(jugadorModificado.getCedula().equals(otrosJugadores.getCedula())){ // y además el número de cédula
+                        if(jugadorModificado.getUsuario().equals(otrosJugadores.getUsuario())){ //Y el nombre del usuario son iguales,
                         
-                            existe = true; 
+                            existe = true; //Este jugador ya existe...
                             int iconoInformacion = JOptionPane.INFORMATION_MESSAGE;
                             JOptionPane.showMessageDialog(rootPane, "Ya existe ese jugador!", "INFORMACIÓN", iconoInformacion); //Mensajse
                             
@@ -215,31 +216,31 @@ public class GUITest00_Jugador extends javax.swing.JFrame {
                 int iconoInformacion = JOptionPane.INFORMATION_MESSAGE;
                 JOptionPane.showMessageDialog(rootPane, "Ya existe ese jugador!", "INFORMACIÓN", iconoInformacion); //Mensajse
 
-                break; 
+                break; //Deja de comparar.
                 }
         }
         
-        if(existe == false){ 
+        if(existe == false){ //Si el jugador no existe
             
-          
+            //Al jugador seleccionado (Del ComboBox) colocale estos atributos:
             jugadorSeleccionado.setNombre(nuevoNombre);
             jugadorSeleccionado.setApellido(nuevoApellido);
             jugadorSeleccionado.setCedula(nuevaCedula);
             jugadorSeleccionado.setUsuario(nuevoUsaurio);
 
-            
+            //Un arreglo para diseñar el orden en el que irán los atributos en la tabla.
             Object jugadoresPro[] = {jugadorSeleccionado.getId(), jugadorSeleccionado.getNombre(), jugadorSeleccionado.getApellido(), jugadorSeleccionado.getCedula(), jugadorSeleccionado.getUsuario()};
-            DefaultTableModel model = (DefaultTableModel) tableJugadores.getModel();
-                                                                                    
+            DefaultTableModel model = (DefaultTableModel) tableJugadores.getModel(); //No hicimos una tabla, sino que ya le pusimos por defecto las columnas
+                                                                                    //Por eso debemos obtener ese modelo.
 
             int posicionItem = comboBoxNinja.getSelectedIndex();
-            model.removeRow(posicionItem);
-            jugadores.remove(posicionItem); 
+            model.removeRow(posicionItem); //Eliminar de la tabla el item de la posicion "p"
+            jugadores.remove(posicionItem); //Eliminar de la lista el item de la posicion "p"
             
-            model.insertRow(posicionItem, jugadoresPro); 
-            jugadores.add(posicionItem, jugadorSeleccionado); 
-            controller.escribirObjeto("jugadores.dat", jugadores); 
-            llenarCombo(); 
+            model.insertRow(posicionItem, jugadoresPro); //Colocar el modificado en la tabla (En la posicion "p") en el orden: jugadoresPro
+            jugadores.add(posicionItem, jugadorSeleccionado); //Colocar el modificado en la lista, en la posicion escogida, y sobreescrbiendo al jugador 
+            controller.escribirObjeto("jugadores.dat", jugadores); //Archivar el cambio
+            llenarCombo(); //Funcion Llenar combo para evidenciar el cambio en el comboBox
         }
         
        
@@ -252,15 +253,17 @@ public class GUITest00_Jugador extends javax.swing.JFrame {
     private void buttonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEliminarActionPerformed
         // TODO add your handling code here:
         System.out.println("Eliminando...");
-        Jugadores jugadorSeleccionado = (Jugadores) comboBoxNinja.getSelectedItem();  
-        DefaultTableModel model = (DefaultTableModel) tableJugadores.getModel(); 
-        int posicionItem = comboBoxNinja.getSelectedIndex(); 
-        model.removeRow(posicionItem); 
-        jugadores.remove(jugadorSeleccionado); 
-        controller.escribirObjeto("jugadores.dat", jugadores); 
+        Jugadores jugadorSeleccionado = (Jugadores) comboBoxNinja.getSelectedItem();  //Hago esto para coger el item de mi comboBox, y "convertirlo a Jugador"
+        DefaultTableModel model = (DefaultTableModel) tableJugadores.getModel(); //Obtengo el modelo, la tabla que cree de forma estática. (Es decir no le puse yo los titulos, ni una matriz de datos, sino que yo cree desde el modelo)
+
+        //Eliminar es tan sencillo como...
+        int posicionItem = comboBoxNinja.getSelectedIndex(); //Este tendrá la posicion del item seleccionado
+        model.removeRow(posicionItem); //Eliminará al item que esté en la posicion "x" de la tabla
+        jugadores.remove(jugadorSeleccionado); //Elimiará al item "Jugador seleccionado" de mi lista de jugadores
+        controller.escribirObjeto("jugadores.dat", jugadores); //Guardará esos cambios en un archivo
         
-        llenarCombo(); 
-        limpiar(); 
+        llenarCombo(); //Evidenciaremos el cambio en el comboBox 
+        limpiar(); //Los campos del textField quedarán vacios
         buttonModificar.setEnabled(false); 
         buttonEliminar.setEnabled(false);
         
@@ -268,11 +271,12 @@ public class GUITest00_Jugador extends javax.swing.JFrame {
 
     private void buttonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRegistrarActionPerformed
         // TODO add your handling code here:
-        System.out.println("Registrando..."); 
-        contador++; 
-        int victorias = 0;
+        System.out.println("Registrando..."); //Cuando se presione el boton registrar imprimirá esto: Registrando...
+        contador++; //El contador aumentará en 1 
+        int victorias = 0; //El numero de victorias es 0 (Todavía no jugamos, nadie ha peleado)
         boolean existe = false;
         
+        //Este constrctor tiene como parámetros el contador, el nombre, el apellido...todos esos atributos tomados de los textfields
         String nombre = textNombre.getText();
         String apellido = textApellido.getText();
         String cedula = textCedula.getText();
@@ -281,38 +285,38 @@ public class GUITest00_Jugador extends javax.swing.JFrame {
         Jugadores jugador = new Jugadores(contador, nombre , apellido, cedula , usuario , victorias);
         
        //Vamo a comparar...
-        for(Object item: jugadores){ 
-            Jugadores otrosJugadores = (Jugadores) item; 
+        for(Object item: jugadores){ //Para cada elemento de tipo Objeto de mi lista de jugadores
+            Jugadores otrosJugadores = (Jugadores) item; //Hago un "casting", para convertir todos esos items a "Jugadores" ¿Para qué? para que no compare: @#$123Reg con Kakashi por ejemplo
       
-            if(jugador.getNombre().equals(otrosJugadores.getNombre())){ 
-                if(jugador.getApellido().equals(otrosJugadores.getApellido())){ 
-                    if(jugador.getCedula().equals(otrosJugadores.getCedula())){ 
-                        if(jugador.getUsuario().equals(otrosJugadores.getUsuario())){ 
+            if(jugador.getNombre().equals(otrosJugadores.getNombre())){ //Si el nombre del jugador que registré, es como el de otro jugador
+                if(jugador.getApellido().equals(otrosJugadores.getApellido())){ //Y además también el apellido, del jugador que registré
+                    if(jugador.getCedula().equals(otrosJugadores.getCedula())){ // y además también el número de cédula
+                        if(jugador.getUsuario().equals(otrosJugadores.getUsuario())){ //Y el por si fuera poco, el nombre del usuario también son iguales,
                         
-                            existe = true; 
+                            existe = true; //Este jugador ya existe...
                             int iconoAdvertencia = JOptionPane.WARNING_MESSAGE;
                             JOptionPane.showMessageDialog(rootPane, "Ya existe ese jugador!", "INFORMACIÓN", iconoAdvertencia); //Mensajse
                             
-                            break; 
+                            break; //Deja de comparar.
                             }                      
                         }
                     }
                 }
         }
-        if(existe == false){ 
-            jugadores.add(jugador); 
-            controller.escribirObjeto("jugadores.dat", jugadores); 
-            jugadores = controller.cargarObjetos("jugadores.dat");
-            limpiar(); 
-            llenarCombo(); 
+        if(existe == false){ //Si ese jugador no exite
+            jugadores.add(jugador); //Añadelo a mi lista de jugadores
+            controller.escribirObjeto("jugadores.dat", jugadores); //Escribe en el archivo: "jugadores.dat" mi lista "jugadores" actualizada
+            jugadores = controller.cargarObjetos("jugadores.dat"); //Cargalos (Los lee y escribe) 
+            limpiar(); //Limpia los textefield
+            llenarCombo(); //Llama a la funcion de llenar el combo
             //Para la tabla...
             //Puedo declarar variables e ir colocando el valor de esas y mandando a la tabla, pro ejemplo
             //int id = jugador.getId();
             //String nombre = jugador.getNombre(); ...etc...
             // Object jugadorRegistrado[] = {id, nombre, etc...}; O puedo mandar ahí mismo
             Object jugadorRegistrado[] = {jugador.getId(), jugador.getNombre(), jugador.getApellido(), jugador.getCedula(), jugador.getUsuario(), jugador.getVictorias()};
-            DefaultTableModel model = (DefaultTableModel) tableJugadores.getModel(); 
-            model.addRow(jugadorRegistrado); 
+            DefaultTableModel model = (DefaultTableModel) tableJugadores.getModel(); //Una vez obtenido mi modelo de tabla
+            model.addRow(jugadorRegistrado); //Añado a mi fila, ese jugador.
         }
         
     }//GEN-LAST:event_buttonRegistrarActionPerformed
@@ -342,7 +346,7 @@ public class GUITest00_Jugador extends javax.swing.JFrame {
     }
      
      private void ponerAudio(){
-        audio = java.applet.Applet.newAudioClip(getClass().getResource("/juegoNaruto/Shalala.wav"));
+        audio = java.applet.Applet.newAudioClip(getClass().getResource("/sonido/Shalala.wav"));
         audio.play();
      }
      
@@ -355,28 +359,29 @@ public class GUITest00_Jugador extends javax.swing.JFrame {
     }
 
     private void llenarCombo() { //Llenar combo
-        if (jugadores.size() > 0) { 
-            buttonPersonaje.setEnabled(true); 
-            comboBoxNinja.setEnabled(true); 
-            jugadores = controller.cargarObjetos("jugadores.dat");
-            modeloComboBox = new DefaultComboBoxModel(jugadores.toArray()); 
-            comboBoxNinja.setModel(modeloComboBox); 
+        if (jugadores.size() > 0) { //Siempre que mi lista sea mayor a cero
+            buttonPersonaje.setEnabled(true); //El boton personaje está habilitado (Es decir el boton que te llevará a seleccionar personaje)
+            comboBoxNinja.setEnabled(true); //el combo Box cedula está tambien habilitado
+            jugadores = controller.cargarObjetos("jugadores.dat"); //Luego cargo mis archivos.... 
+            modeloComboBox = new DefaultComboBoxModel(jugadores.toArray()); //le mando a mi modelo de combo box mis jugadores...
+            comboBoxNinja.setModel(modeloComboBox); //Coloco ese modelo a mi combo!
             
-        } else { 
-            buttonPersonaje.setEnabled(false); 
-            comboBoxNinja.setEnabled(false); 
+        } else { //De no ser así (De no haber ni un jugador registrado)
+            buttonPersonaje.setEnabled(false); //El botón personaje está muerto
+            comboBoxNinja.setEnabled(false); //Y en el combo no hay nada que filtrar
         }
     }
 
     private void llenarTabla() { //Llenar tabla
-        if (jugadores.size() > 0) {
-            Jugadores palyer = new Jugadores(); 
-            DefaultTableModel model = (DefaultTableModel) tableJugadores.getModel(); 
-            for (int i = 0; i < jugadores.size(); i++) { 
-                palyer = (Jugadores) jugadores.get(i); 
-                
+        if (jugadores.size() > 0) { //Siempre que existan jugadores 
+            Jugadores palyer = new Jugadores(); //Instancio (Haciendo ref. al constructor vacío...)
+            DefaultTableModel model = (DefaultTableModel) tableJugadores.getModel();  //Instancio una tabla (Recuerda que esto es necesario para obtener el modelo)
+            for (int i = 0; i < jugadores.size(); i++) { //hago ref. al constructor vacio e itero...
+                palyer = (Jugadores) jugadores.get(i); //Para obtener mediante un casting (Estoy convirtiendo mi lista de objetos jugadores, que es un arraylist de objetos, a jugadores), y los voy obteneindo acrode a sus posiciones
+
+                //Luego, simplemente doy el orden de cómo ese objeto "player" irá en la tabla:
                 Object jugadrosChidoris[] = {palyer.getId(), palyer.getNombre(), palyer.getApellido(), palyer.getCedula(), palyer.getUsuario()};
-                model.insertRow(i, jugadrosChidoris); 
+                model.insertRow(i, jugadrosChidoris); //Inserto en una posicion de la tabla, el arreglo deo objetos  (Las filas)
             }
         }
     }

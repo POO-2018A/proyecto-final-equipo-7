@@ -13,8 +13,8 @@ public class GUITest00_Personajes extends javax.swing.JFrame {
     AudioClip audio;
     ArrayList<Object> jugadores = new ArrayList();
     Control controller = new Control();
-    DefaultComboBoxModel modeloComboBoxPlayer1, modeloComboBoxPlayer2; 
-    int jugador1, jugador2; 
+    DefaultComboBoxModel modeloComboBoxPlayer1, modeloComboBoxPlayer2; //Ok, voy a hacer así, ojalá os sirva 
+    int jugador1, jugador2; //Esto declaro porque voy a comprar entre items (Posiciones de items) de los jugadores que se seleccionen
     /**
      * Creates new form GUITest00_Personajes
      */
@@ -23,13 +23,13 @@ public class GUITest00_Personajes extends javax.swing.JFrame {
         ponerFondo();
         ponerAudio();
         
-        jugadores = controller.cargarObjetos("jugadores.dat"); 
-        llenarCombo();
+        jugadores = controller.cargarObjetos("jugadores.dat"); //Cargar los archivos
+        llenarCombo(); //Siempre es importante llenar el combo box, luego de cargar los archivos jajaja
         
-        buttonJugar.setEnabled(false); 
-        buttonJugador2.setEnabled(false); 
-        comboBoxPlayer2.setEnabled(false); 
-        this.setLocationRelativeTo(null); 
+        buttonJugar.setEnabled(false); //Mi boton jugar me llevará a mi otra ventana (Que aún no vemos)
+        buttonJugador2.setEnabled(false); // El jugador 2 está bloqueado hasta que seleccion el jugador 1
+        comboBoxPlayer2.setEnabled(false); // El combo box del jugador 2 está bloquedo hasta que seleccione el jugador 1
+        this.setLocationRelativeTo(null); //Esto hará que el juego se imprima en el centro de la pantalla, pues null hace referencia a eso, "la pantalla de nuestro PC"
     }
 
   
@@ -112,22 +112,22 @@ public class GUITest00_Personajes extends javax.swing.JFrame {
 
     private void buttonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonVolverActionPerformed
         // TODO add your handling code here:
-        audio.stop(); 
+        audio.stop(); //Cada vez que aplaste el boton voler a Registro, esta cancion se detiene
          
-        GUITest00_Jugador jugador = new GUITest00_Jugador(); 
-        jugador.setVisible(true); 
-        this.setVisible(false); 
+        GUITest00_Jugador jugador = new GUITest00_Jugador(); //Instancio mi clase de registro (La invoco)
+        jugador.setVisible(true); //Y digo, has que esa ventana ser visible
+        this.setVisible(false); //Y que esta ya no lo sea
        
     }//GEN-LAST:event_buttonVolverActionPerformed
 
     private void buttonJugador1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonJugador1ActionPerformed
         // TODO add your handling code here:
-        buttonJugador2.setEnabled(true); 
-        comboBoxPlayer2.setEnabled(true); 
-        modeloComboBoxPlayer2 = new DefaultComboBoxModel(jugadores.toArray()); 
-        comboBoxPlayer2.setModel(modeloComboBoxPlayer2); 
+        buttonJugador2.setEnabled(true); //En  este boton (Botón de jugdor 1), lo que hacemos es que cada vez que lo aplastemos, el botón del jugador 2 se desbloqueará
+        comboBoxPlayer2.setEnabled(true); //Al igual que el combo box del jugador 2
+        modeloComboBoxPlayer2 = new DefaultComboBoxModel(jugadores.toArray()); //Una vez debloqueado el combo box del jugador 2, coloca en el modelo del combo los items de mi lista de jugadores
+        comboBoxPlayer2.setModel(modeloComboBoxPlayer2); //Y también a mi combo, mandale ese modelo ya hechito
         
-        jugador1 = comboBoxPlayer1.getSelectedIndex();
+        jugador1 = comboBoxPlayer1.getSelectedIndex(); //Coge la posición del item que seleccionó del combo Box (Del jugador 1)
            
        
         
@@ -135,19 +135,19 @@ public class GUITest00_Personajes extends javax.swing.JFrame {
 
     private void buttonJugador2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonJugador2ActionPerformed
         // TODO add your handling code here:
-        jugador2 = comboBoxPlayer2.getSelectedIndex(); 
+        jugador2 = comboBoxPlayer2.getSelectedIndex(); //Coge la posición del item que seleccionó del combo Box (Del jugador 2)
         
-        if(jugador1 == jugador2){ 
-            comboBoxPlayer2.setEnabled(false); 
-            buttonJugador2.setEnabled(false); 
+        if(jugador1 == jugador2){ //Compara, si son iguales
+            comboBoxPlayer2.setEnabled(false); //El combo box del jugador 2
+            buttonJugador2.setEnabled(false); //Y el boton del jugador 2, se bloquean
             
-           
+            //Y presenta estos mensajes:
             int iconoError = JOptionPane.ERROR_MESSAGE;
             int iconoOpcion = JOptionPane.INFORMATION_MESSAGE;
             JOptionPane.showMessageDialog(rootPane, "SELECCIÓN NO VÁLIDA: Escogiste 2 veces al mismo ninja", "ERROR", iconoError);
             JOptionPane.showMessageDialog(rootPane, "Pruba elijiendo a dos ninjas diferentes...", "INFORMACIÓN", iconoOpcion);
             
-        }else{ 
+        }else{ //De lo contrario, si no son iguales, ya quedan seleccionados esos ninjas...
             comboBoxPlayer1.setEnabled(false);
             buttonJugador1.setEnabled(false);
             comboBoxPlayer2.setEnabled(false);
@@ -171,15 +171,17 @@ public class GUITest00_Personajes extends javax.swing.JFrame {
         audio.play();
      }
       
-   private void llenarCombo() { 
+   private void llenarCombo() { //Cada vez que llames a esta funcion
         
-        if (jugadores.size() > 0) { 
+        if (jugadores.size() > 0) { //Simepre que la lista no este vacia
             
-            comboBoxPlayer1.setEnabled(true);
-            jugadores = controller.cargarObjetos("jugadores.dat"); 
-            modeloComboBoxPlayer1 = new DefaultComboBoxModel(jugadores.toArray()); 
-            comboBoxPlayer1.setModel(modeloComboBoxPlayer1); 
+            comboBoxPlayer1.setEnabled(true); //El combo box del jugador 1 es visible, y tendrá archivos cargados! (Ver init components)
            
+            jugadores = controller.cargarObjetos("jugadores.dat"); //Carga los archivos
+            modeloComboBoxPlayer1 = new DefaultComboBoxModel(jugadores.toArray()); //Coloca esos en m modelo
+            comboBoxPlayer1.setModel(modeloComboBoxPlayer1); //Coloca en mi combo
+            
+           //Listo..
     
         } else {
             comboBoxPlayer1.setEnabled(false);
